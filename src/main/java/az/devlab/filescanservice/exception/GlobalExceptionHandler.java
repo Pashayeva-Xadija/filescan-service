@@ -1,8 +1,10 @@
 package az.devlab.filescanservice.exception;
 
 import az.devlab.filescanservice.dto.ErrorResponse;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -15,8 +17,9 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
-
-@RestControllerAdvice
+@Hidden
+@RestControllerAdvice(basePackages = "az.devlab.filescanservice.controller")
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(InfectionDetectedException.class)
@@ -68,7 +71,7 @@ public class GlobalExceptionHandler {
         String msg = ex.getConstraintViolations().stream()
                 .map(v -> v.getPropertyPath() + ": " + v.getMessage())
                 .collect(Collectors.joining("; "));
-        HttpStatus status = HttpStatus.BAD_REQUEST; // 400
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(
                 error(status, msg, req, null)
         );
@@ -100,14 +103,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex, HttpServletRequest req) {
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        return ResponseEntity.status(status).body(
-                error(status, "Unexpected error", req, null)
-        );
-    }
 
 
     private static ErrorResponse error(HttpStatus status, String message, HttpServletRequest req, String traceId) {

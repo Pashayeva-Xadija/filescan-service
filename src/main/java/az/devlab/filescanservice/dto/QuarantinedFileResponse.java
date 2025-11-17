@@ -1,11 +1,12 @@
 package az.devlab.filescanservice.dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 import java.time.Instant;
 
-@Getter
+@Data
 @Builder
 public class QuarantinedFileResponse {
     private final String traceId;

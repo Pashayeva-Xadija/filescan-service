@@ -20,6 +20,7 @@ Log scan outcomes for full audit and traceability.
 Notify administrators by email when an infection is detected (optional).
 
 🧱 System Architecture
+Əsas Komponentlər
 Component	Technology	Purpose
 Backend Framework	Spring Boot 3	Core application and REST API
 Antivirus Engine	ClamAV (TCP / REST)	File scanning service
@@ -29,49 +30,55 @@ File Storage	Local File System	Upload and quarantine directories
 Security	Spring Security (API Key)	Protects API endpoints
 Email Notifications	Spring Mail (Optional)	Sends alerts for infected files
 Mapping	MapStruct	Clean object mapping between DTOs and entities
+
 🎯 Project Requirements & How They Were Implemented
 Requirement	Implementation
 Multipart File Upload	Implemented via FileUploadController using MultipartFile.
-ClamAV Integration	Two client modes: TCP (ClamAVTcpClient) and REST (ClamAVRestClient). Configurable via clamav.mode.
+ClamAV Integration	Two client modes: TCP (ClamAVTcpClient) and REST (ClamAVRestClient) — configurable via clamav.mode.
 Asynchronous Scanning	File scanning executed in background using @Async("scanExecutor").
 Infection Handling	Infected files moved to quarantine folder, marked as INFECTED.
 Scan Result Logging	Implemented via ScanLogService and persisted in PostgreSQL.
 Error Handling	Graceful error responses handled by GlobalExceptionHandler.
 Connection Failures	Caught and logged with fallback handling in FileScanServiceImpl.
-Email Notifications (Bonus)	Implemented via EmailNotificationServiceImpl using Spring Mail.
+Email Notifications (Bonus)	Using Spring Mail in EmailNotificationServiceImpl.
 Quarantine Management (Bonus)	QuarantineServiceImpl moves infected files to separate quarantine path.
+
 🧩 Must-Have Features
 📤 Multipart File Upload
 
-Securely accepts files via POST /api/files/upload.
+Accepts files via POST /api/files/upload
 
-Validates request, starts async scanning job, and returns immediate response (202 Accepted).
+Validates request
+
+Starts async scanning
+
+Returns 202 Accepted immediately
 
 🧠 ClamAV Integration
 
-Supports both TCP and REST modes:
+Supports two scanning modes:
 
-clamav.mode=TCP → uses socket client.
+TCP mode → clamav.mode=TCP
 
-clamav.mode=REST → uses HTTP client.
+REST mode → clamav.mode=REST
 
-Fully configurable in application.properties.
+Fully configurable through application.properties.
 
 ⚡ Asynchronous Scanning
 
-Non-blocking scanning handled by Spring’s @Async executor.
+Scanning happens in parallel using Spring @Async
 
-Users receive immediate confirmation while the backend scans in parallel.
+User gets immediate confirmation while backend scans file in background
 
 🚫 Infection Handling
 
-Infected files are quarantined automatically under /data/quarantine.
+Infected files are automatically moved to /data/quarantine
 
-ScanLog entries are updated with INFECTED status and details.
+Scan logs updated with status INFECTED
 
 🧾 Scan Result Logging
 
-Each scan is logged with:
+Each scan includes:
 
 Trace ID
 
@@ -86,15 +93,11 @@ Message or ClamAV response
 💡 Bonus Features Implemented
 🧳 Quarantine Management
 
-Infected files are moved to a separate quarantine directory.
-
-Logged for future inspection or deletion.
+Moves infected files to a separate directory for investigation
 
 📧 Email Notifications
 
-When enabled, admin(s) receive automatic alerts when infections are found.
-
-Configured via mail.enabled=true.
+Sends automatic email alerts for infected files (if enabled)
 
 🧰 Technical Stack
 Category	Tools / Libraries
@@ -109,14 +112,14 @@ Virus Engine	ClamAV TCP / REST
 Mail (Optional)	Spring Boot Mail
 🔒 Security Highlights
 
-All endpoints protected by an API key header:
+All endpoints protected via API key header:
 
 X-API-KEY: dev-secret-key
 
 
-Invalid or missing key → returns 401 Unauthorized.
+Missing/invalid key → 401 Unauthorized
 
-Clean GlobalExceptionHandler provides uniform JSON responses.
+Global exception handler ensures uniform JSON responses
 
 🚀 How to Run Locally
 1️⃣ Prerequisites
@@ -129,15 +132,16 @@ Maven
 
 PostgreSQL
 
-ClamAV daemon (running on port 3310)
+ClamAV daemon (port 3310)
 
 2️⃣ Database
 
-Create a PostgreSQL database (e.g., postgres) and update credentials in application.properties.
+Create PostgreSQL database (e.g., postgres)
+Update credentials in application.properties.
 
 3️⃣ Configure ClamAV
 
-Ensure clamd service is active:
+Ensure ClamAV daemon is running:
 
 sudo systemctl start clamav-daemon
 
@@ -146,16 +150,18 @@ mvn spring-boot:run
 
 🧾 Example API Endpoints
 Method	Endpoint	Description
-POST	/api/files/upload	Uploads file and starts async virus scan
+POST	/api/files/upload	Uploads file and starts async scan
 GET	/api/logs	Lists scan logs (paged)
 GET	/api/quarantine	Lists quarantined files (bonus)
-Sample Upload Request
-curl -X POST "http://localhost:8080/api/files/upload" \
+🧪 Sample Upload Request
+curl -X POST "http://localhost:2122/api/files/upload" \
 -H "X-API-KEY: dev-secret-key" \
 -F "file=@/path/to/sample.pdf"
---------------------------------------------------------------------------
-📬 Contact:
 
-Made with Xadija Pashayeva: 📧 xadijapashayeva@gmail.com
+📬 Contact
 
-LinkedIn: https://www.linkedin.com/in/xadija-pashayeva
+Made with ❤️ by Xadija Pashayeva
+
+📧 Email: xadijapashayeva@gmail.com
+
+🔗 LinkedIn: https://www.linkedin.com/in/xadija-pashayeva
