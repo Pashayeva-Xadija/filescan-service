@@ -157,9 +157,9 @@ GET	/api/quarantine	Lists quarantined files (bonus)
 curl -X POST "http://localhost:2122/api/files/upload" \
 -H "X-API-KEY: dev-secret-key" \
 -F "file=@/path/to/sample.pdf"
-----------------------------------------------------------------
+
 🔗 Swagger:http://localhost:2122/swagger-ui/index.html
-----------------------------------------------------------------
+
 📬 Contact
 
 Made with  by Xadija Pashayeva
