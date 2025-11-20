@@ -38,8 +38,8 @@ FileScan enables developers and system administrators to:
 
 | Requirement             | Implementation                                                                                |
 |-------------------------|------------------------------------------------------------------------------------------------|
-| Multipart File Upload   | Implemented via `FileUploadController` using `MultipartFile`                                  |
-| ClamAV Integration      | TCP mode (`ClamAVTcpClient`) and REST mode (`ClamAVRestClient`) — configurable via `clamav.mode` |
+| Multipart File Upload   | Implemented via `FileUploadController` using `MultipartFile                                  |
+| ClamAV Integration      | TCP mode (`ClamAVTcpClient`) and REST mode (`ClamAVRestClient`) — configurable via clamav.mode |
 | Asynchronous Scanning   | Background scan using `@Async("scanExecutor")`                                                |
 | Infection Handling      | Infected files moved to `quarantine` and marked `INFECTED`                                    |
 | Scan Logging            | Implemented via `ScanLogService`, stored in PostgreSQL                                        |
