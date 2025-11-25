@@ -23,9 +23,10 @@ public class ScanLogServiceImpl implements ScanLogService {
         log.setFilename(filename);
         log.setSizeBytes(sizeBytes);
         log.setStatus(ScanStatus.STARTED);
-        log.setCreatedAt(Instant.now());
+        log.setVerdict(Verdict.UNKNOWN);
         return repo.save(log);
     }
+
 
     @Override
     public void finish(String traceId, ScanStatus status, Verdict verdict, String message, long durationMs) {

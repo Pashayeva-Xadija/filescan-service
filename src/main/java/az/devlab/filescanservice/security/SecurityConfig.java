@@ -3,9 +3,6 @@ package az.devlab.filescanservice.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -17,14 +14,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final ApiKeyAuthFilter apiKeyAuthFilter;
-    private final ApiKeyAuthenticationProvider apiKeyProvider;
     private final RestAuthEntryPoint restEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
-
-    @Bean
-    public AuthenticationManager authenticationManager() {
-        return new ProviderManager(apiKeyProvider);
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,7 +25,6 @@ public class SecurityConfig {
                 .exceptionHandling(eh -> eh
                         .authenticationEntryPoint(restEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler))
-
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/actuator/health",
@@ -44,12 +34,9 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
                         .anyRequest().authenticated())
-
-
                 .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class)
-
-                .httpBasic(Customizer.withDefaults())
-
                 .build();
     }
 }
+
+
