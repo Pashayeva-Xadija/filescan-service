@@ -165,13 +165,8 @@ curl -X POST "http://localhost:2122/api/files/upload" \
 
 http://localhost:2122/swagger-ui/index.html
 
-📬 Contact
 
 Made with  by Xadija Pashayeva
 
-📧 Email: xadijapashayeva@gmail.com
 
-🔗 LinkedIn: https://www.linkedin.com/in/xadija-pashayeva
-
-All endpoints are protected with an API key header:
 
